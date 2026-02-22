@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+}
+
+group = 'com.vaddi'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+generateOpenApiDocs {
+	println "Calling generateOpenApiDocs"
+    apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+    outputFileName.set("api.yaml")
+    outputDir.set(file("$buildDir/docs"))
+    waitTimeInSeconds.set(30)
+    println "Completed -> generateOpenApiDocs"
+}
+
+tasks.named("build") {
+    dependsOn("generateOpenApiDocs")
+}
+
+tasks.register("uploadApiSpec", Exec) {
+    dependsOn "build"
+    commandLine "rdme", "openapi", "$buildDir/docs/api.yml",
+            "--key=${System.getenv("README_API_KEY")}",
+            "--id=${System.getenv("README_API_ID")}"
+}
