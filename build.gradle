@@ -28,8 +28,8 @@ dependencies {
 generateOpenApiDocs {
 	println "Calling generateOpenApiDocs"
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
-    outputFileName.set("api.yaml")
-    outputDir.set(file("$buildDir/docs"))
+    outputFileName.set("openapi.yaml")
+    outputDir.set(file("$buildDir/openapi"))
     waitTimeInSeconds.set(30)
     println "Completed -> generateOpenApiDocs"
 }
@@ -40,7 +40,7 @@ tasks.named("build") {
 
 tasks.register("uploadApiSpec", Exec) {
     dependsOn "build"
-    commandLine "rdme", "openapi", "$buildDir/docs/api.yml",
+    commandLine "rdme", "openapi", "$buildDir/openapi/openapi.yml",
             "--key=${System.getenv("README_API_KEY")}",
             "--id=${System.getenv("README_API_ID")}"
 }
