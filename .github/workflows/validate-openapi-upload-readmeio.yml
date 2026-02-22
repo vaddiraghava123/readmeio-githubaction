@@ -20,6 +20,10 @@ jobs:
 
       - name: Install ReadMe CLI
         run: npm install -g rdme
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Build project
+        run: ./gradlew build
 
       - name: Upload OpenAPI Spec
         run: echo "README changed? ${{secrets.README_API_KEY}} ${{ secrets.README_API_ID}} " |
