@@ -37,3 +37,10 @@ generateOpenApiDocs {
 tasks.named("build") {
     dependsOn("generateOpenApiDocs")
 }
+
+tasks.register("uploadApiSpec", Exec) {
+    dependsOn "build"
+    commandLine "rdme", "openapi", "$buildDir/docs/api.yml",
+            "--key=${System.getenv("README_API_KEY")}",
+            "--id=${System.getenv("README_API_ID")}"
+}
