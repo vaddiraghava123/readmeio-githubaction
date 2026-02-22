@@ -22,7 +22,8 @@ jobs:
         run: npm install -g rdme
 
       - name: Upload OpenAPI Spec
-        run: ./gradlew uploadApiSpec
+        run: echo "README changed? ${{secrets.README_API_KEY}} ${{ secrets.README_API_ID}} " |
+          ./gradlew uploadApiSpec
         env:
           README_API_KEY: ${{ secrets.README_API_KEY}}
           README_API_ID: ${{ secrets.README_API_ID}}
