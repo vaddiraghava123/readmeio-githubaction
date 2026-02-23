@@ -26,12 +26,10 @@ dependencies {
 }
 
 generateOpenApiDocs {
-	println "Calling generateOpenApiDocs"
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
     outputFileName.set("openapi.yaml")
-    outputDir.set(file("$buildDir/openapi"))
+    outputDir.set(layout.buildDirectory.dir("openapi"))
     waitTimeInSeconds.set(30)
-    println "Completed -> generateOpenApiDocs"
 }
 
 tasks.named("build") {
@@ -39,9 +37,16 @@ tasks.named("build") {
 }
 
 tasks.register("uploadApiSpec", Exec) {
-    dependsOn "build"
-    commandLine "rdme", "openapi", "upload", $buildDir/openapi/openapi.yaml",
-            "--key",${System.getenv("README_API_KEY")}",
-            "--slug",${System.getenv("README_API_ID")}"
-            
+    dependsOn("build")
+
+    doFirst {
+        if (!System.getenv("README_API_KEY") || !System.getenv("README_API_ID")) {
+            throw new GradleException("README API env vars not set")
+        }
+    }
+
+    commandLine "rdme", "openapi", "upload",
+            "$buildDir/openapi/openapi.yaml",
+            "--key", System.getenv("README_API_KEY"),
+            "--slug", System.getenv("README_API_ID")
 }
