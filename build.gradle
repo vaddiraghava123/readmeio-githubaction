@@ -42,6 +42,6 @@ tasks.register("uploadApiSpec", Exec) {
     dependsOn "build"
     commandLine "rdme", "openapi", "$buildDir/openapi/openapi.yaml",
             "--key=${System.getenv("README_API_KEY")}",
-            "--id=${System.getenv("README_API_ID")}",
-            "--version=v1.0"
+            "--slug=${System.getenv("README_API_ID")}"
+            
 }
