@@ -40,8 +40,8 @@ tasks.named("build") {
 
 tasks.register("uploadApiSpec", Exec) {
     dependsOn "build"
-    commandLine "rdme", "openapi", "$buildDir/openapi/openapi.yaml",
-            "--key=${System.getenv("README_API_KEY")}",
-            "--slug=${System.getenv("README_API_ID")}"
+    commandLine "rdme", "openapi", "upload", $buildDir/openapi/openapi.yaml",
+            "--key",${System.getenv("README_API_KEY")}",
+            "--slug",${System.getenv("README_API_ID")}"
             
 }
