@@ -26,10 +26,12 @@ dependencies {
 }
 
 generateOpenApiDocs {
+    println "Calling generateOpenApiDocs"
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
     outputFileName.set("openapi.yaml")
-    outputDir.set(layout.buildDirectory.dir("openapi"))
+    outputDir.set(file("$buildDir/openapi"))
     waitTimeInSeconds.set(30)
+    println "Completed -> generateOpenApiDocs"
 }
 
 tasks.named("build") {
